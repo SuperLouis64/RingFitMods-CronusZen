@@ -1,0 +1,99 @@
+/* *
+GPC script that allows Ring fit Controls through the CronusZen
+Main difference between this and Titan Two is that the Joycons are reversed
+This is not a problem outside of that you can't use the Ring con so womp womp
+
+
+Elden Ring Fit (1.0)
+- You need the following -
+> Left & Right Joycon * Leg strap <
+
+Goal: Lock the movement joystick from moving until you jog
+Also allow squat to heal you by squatting and pressing the button
+
+Set-up the controls you want via the Elden Ring's Controller settings
+
+D-pad is now swaped with the face buttons to do things
+
+if you nee help @ SuperLouis_64 on twitter
+
+
+* *********************************************************** */
+
+// remap d-pad to stuff
+remap PS4_UP -> PS4_TRIANGLE;
+remap PS4_LEFT -> PS4_SQUARE;
+remap PS4_DOWN -> PS4_CROSS;
+remap PS4_RIGHT -> PS4_CIRCLE;
+
+
+int runCheck; // variable to see if the User is running
+
+
+main 
+{
+	set_val(XB1_SHARE, 0.0);
+
+	nowRunning();
+	
+	//Lock the joystick behind running. Increase this Magic number if you want a harder workout (will fix in the future)
+	if(runCheck < 50) 
+		{
+			set_val(XB1_LX, 0.0);
+			set_val(XB1_LY, 0.0);
+		}
+
+	// resets variable if it goes under 0
+	if(runCheck <0)
+		{
+			runCheck = 0;
+		}
+
+	
+	if(get_val(SWI_CAPTURE) > 0.0) // make lockon the Switch Capture
+		{
+			set_val(XB1_SYNC, 0.0);
+			set_val(XB1_RS, 100.0);
+		}
+	
+/* 
+Squat/Heal Controls
+Hold the Left D-Pad and squat to heal!
+WIP but you might need to change the ACCY and ACCZ values until they work for you
+
+*/
+
+if(get_val(SWI_LEFT) > 0.0)
+	{
+		set_val(SWI_LEFT, 0.0);
+		
+		if(get_val(SWI_ACCY) > get_val(SWI_ACCZ)) // check to see when Y is greater than Z
+			{
+				if(get_val(SWI_ACCY) > 12.0 && get_val(SWI_ACCZ) > 10.0) //look to see if it's over a certain
+					{
+						set_val(SWI_LEFT, 100.0);	
+					}
+			}
+	}
+
+
+}
+
+
+/* function that handles the running algorithm
+ literally if the joycon detects you running, it starts the runcheck
+*/
+function nowRunning()
+{
+
+	if(get_val(SWI_ACCY) < -20.0)
+		{
+			runCheck = 100;	
+				
+		}
+	if(get_val(SWI_ACCY) < -0.0 && get_val(SWI_ACCY) > -6.0)
+		{
+			runCheck--;
+		}
+
+}
