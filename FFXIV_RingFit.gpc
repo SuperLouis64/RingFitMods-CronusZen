@@ -1,0 +1,98 @@
+/*
+FFXIV Ring Fit Set-up (1.0)
+- You need the following -
+> Left & Right Joycon * Leg strap <
+
+Goal:
+Be able to run or jog IRL to move in-game
+
+Concerns:
+this is a MMO with 2 billion buttons. This might not work very well for progging or Ultimate clears
+however if you want to do a nice little jog through Eorzea you can!
+Also low level stuff should be fine
+
+*/
+
+// remap d-pad to stuff
+remap PS4_UP -> PS4_TRIANGLE;
+remap PS4_LEFT -> PS4_SQUARE;
+remap PS4_DOWN -> PS4_CROSS;
+remap PS4_RIGHT -> PS4_CIRCLE;
+
+
+int runCheck; // variable to see if the User is running
+int isSquat;
+int isRunning;
+int controllerOn;
+
+main 
+{
+	set_val(XB1_SHARE, 0.0);
+
+	nowRunning();
+	
+	if(get_val(SWI_L) > 0.0) // switch the L to RT because FFXIV is just like that
+		{
+			set_val(SWI_L, 0.0);
+			set_val(SWI_ZR, 100.0);
+		}
+	
+	
+	//Lock the joystick behind running
+	if(runCheck < 50) 
+		{
+			set_val(XB1_LX, 0.0);
+			set_val(XB1_LY, 0.0);
+		}
+
+	// resets variable if it goes under 0
+	if(runCheck <0)
+		{
+			runCheck = 0;
+		}
+
+	
+	if(get_val(SWI_CAPTURE) > 0.0) // make lockon the Switch Capture
+		{
+			set_val(XB1_SYNC, 0.0);
+			set_val(XB1_RS, 100.0);
+		}
+	
+/* Squat/Heal  
+Squat and press the CAPTURE button to use the 
+*/
+
+	
+// check to see if the X button being pressed
+
+if(get_val(SWI_LEFT) > 0.0)
+	{
+		set_val(SWI_LEFT, 0.0);
+		
+		if(get_val(SWI_ACCY) > get_val(SWI_ACCZ)) // check to see when Y is greater than Z
+			{
+				if(get_val(SWI_ACCY) > 12.0 && get_val(SWI_ACCZ) > 10.0) //look to see if it's over a certain
+					{
+						set_val(SWI_LEFT, 100.0);	
+					}
+			}
+	}
+
+
+}
+
+
+function nowRunning()
+{
+
+	if(get_val(SWI_ACCY) < -20.0)
+		{
+			runCheck = 100;	
+				
+		}
+	if(get_val(SWI_ACCY) < -0.0 && get_val(SWI_ACCY) > -6.0)
+		{
+			runCheck--;
+		}
+
+}
