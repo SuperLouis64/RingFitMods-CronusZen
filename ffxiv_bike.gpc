@@ -1,0 +1,103 @@
+/* *
+FFXIV bike based off of Mario Kart
+
+* *********************************************************** */
+
+
+remap PS4_LX -> PS4_RX;
+
+int runCheck;
+int canRun;
+
+
+main 
+{
+
+	set_val(XB1_SHARE, 0.0);
+	nowRunning(); // run the function to check if pedaling
+	DPAD();
+
+	if(get_val(SWI_MINUS) > 0.0) // turn off program when pressing start
+		{
+			canRun = FALSE;
+		}
+
+	if(get_val(SWI_CAPTURE) > 0.0) // turn on program when pressing capture
+		{
+			canRun = TRUE;
+			set_val(SWI_CAPTURE, 0.0)
+		}
+		
+		
+	if(runCheck > 0 && canRun)
+		{					
+			set_val(PS4_LY, -100.0); // Run to drive
+		}
+	
+	if(runCheck < 0)
+		{
+			runCheck = 0;
+		}
+
+	// turn off D-pad so it doesn't be messed with on the legstrap		
+	// turn off legstrap joystick
+	set_val(SWI_RX, 0.0);
+	set_val(SWI_RY, 0.0);
+	set_val(SWI_R3, 0.0);
+
+	if(get_val(SWI_ZL) > 0.0)
+		{
+			set_val(SWI_ZL, 0.0)
+			set_val(SWI_ZR, 100.0);
+		}
+	
+}
+
+
+function DPAD()
+{
+	if(get_val(SWI_UP) > 0.0)
+		{
+			set_val(SWI_UP, 0.0);
+			set_val(SWI_Y, 100.0);
+		}
+	
+	if(get_val(SWI_RIGHT) > 0.0)
+		{
+			set_val(SWI_RIGHT, 0.0);
+			set_val(SWI_A, 100.0);
+		}
+		
+	if(get_val(SWI_DOWN) > 0.0)
+		{
+			set_val(SWI_DOWN, 0.0);
+			set_val(SWI_B, 100.0);
+		}
+	
+	if(get_val(SWI_LEFT) > 0.0)
+		{
+			set_val(SWI_LEFT, 0.0);
+			set_val(SWI_Y, 100.0);
+		}
+		
+}
+ 
+function nowRunning()
+{
+	
+	if(get_val(SWI_GYROX) < -5.0)
+		{
+			runCheck = 100;
+		}
+		
+	if(get_val(SWI_GYROX) > 5.0)
+		{
+			runCheck = 100;
+		}
+	
+	
+	if(get_val(SWI_GYROX) > -2.0 && get_val(SWI_GYROX) < 2.0)
+		{
+			runCheck--;
+		}
+}
