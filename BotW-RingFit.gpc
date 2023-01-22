@@ -37,32 +37,31 @@ unmap SWI_CAPTURE;
 main 
 {			
 	nowRunning();
-	runOn = FALSE;
-
+	
    // turn off buttons if i'm not running
    // 70 is a magic number that sets a pace for the user to be running at for 
    // the controller's joystick to be activated
    // increase if you want to run harder, decrease if you want to run less
 
-	if (runCheck < 40 && runOn)
-	{
-		set_val(SWI_LX, 0.0);
-		set_val(SWI_LY, 0.0);	
-	}
+	if(runCheck < 70)
+		{
+			set_val(SWI_LX, 0.0);
+			set_val(SWI_LY, 0.0);	
+		}
 
     // resets variable if it goes under 0
-	if (runCheck < 0)
-	{
-		runCheck = 0;
-	}    
+	if(runCheck < 0)
+		{
+			runCheck = 0;
+		}    
 	
 	
     // SWI_ACCZ = -25.00 = squats + Plus = start menu
-	if (get_val(SWI_ACCY) > 10.00 && get_val(SWI_MINUS) == 100.0)
-	{
-		set_val(SWI_MINUS, 0.0);
-		set_val(SWI_PLUS, 100.0);
-	}
+	if(get_val(SWI_ACCY) > 10.00 && get_val(SWI_MINUS) == 100.0)
+		{
+			set_val(SWI_MINUS, 0.0);
+			set_val(SWI_PLUS, 100.0);
+		}
 }
 
 // function that handles the running algorithm
@@ -71,13 +70,13 @@ main
 function nowRunning()
 {
 
-	if (get_val(SWI_ACCY) < -20.0)
-	{
-		runCheck = 100;	
+	if(get_val(SWI_ACCY) < -20.0)
+		{
+			runCheck = 100;	
 				
-	}
-	if (get_val(SWI_ACCY) < -0.0 && get_val(SWI_ACCY) > -6.0)
-	{
-		runCheck = runCheck--;
-	}
+		}
+	if(get_val(SWI_ACCY) < -0.0 && get_val(SWI_ACCY) > -6.0)
+		{
+			runCheck = runCheck--;
+		}
 }
