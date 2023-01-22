@@ -1,0 +1,83 @@
+/* *
+GPC script that allows Ring fit Controls through the CronusZen
+Main difference between this and Titan Two is that the Joycons are reversed
+This is not a problem outside of that you can't use the Ring con so womp womp
+
+
+Breath of the Wild (1.0)
+- You need the following -
+> Left & Right Joycon * Leg strap <
+
+Goal: Lock the movement joystick from moving until you jog
+Also allow squat to heal you by squatting and pressing the button
+
+D-pad is now swaped with the face buttons to do things
+
+if you need help @ SuperLouis_64 on twitter
+
+
+* *********************************************************** */
+
+int runCheck; // variable to see if the User is running
+int runOn;
+
+remap SWI_ZL -> SWI_X;
+unmap SWI_ZL;
+remap SWI_UP -> SWI_A;
+unmap SWI_UP;
+remap SWI_LEFT -> SWI_ZR;
+unmap SWI_LEFT;
+remap SWI_RIGHT -> SWI_Y;
+unmap SWI_RIGHT;
+remap SWI_DOWN -> SWI_UP;
+unmap SWI_DOWN;
+remap SWI_CAPTURE -> SWI_B;
+unmap SWI_CAPTURE;
+
+main 
+{			
+	nowRunning();
+	runOn = FALSE;
+
+   // turn off buttons if i'm not running
+   // 70 is a magic number that sets a pace for the user to be running at for 
+   // the controller's joystick to be activated
+   // increase if you want to run harder, decrease if you want to run less
+
+	if (runCheck < 40 && runOn)
+	{
+		set_val(SWI_LX, 0.0);
+		set_val(SWI_LY, 0.0);	
+	}
+
+    // resets variable if it goes under 0
+	if (runCheck < 0)
+	{
+		runCheck = 0;
+	}    
+	
+	
+    // SWI_ACCZ = -25.00 = squats + Plus = start menu
+	if (get_val(SWI_ACCY) > 10.00 && get_val(SWI_MINUS) == 100.0)
+	{
+		set_val(SWI_MINUS, 0.0);
+		set_val(SWI_PLUS, 100.0);
+	}
+}
+
+// function that handles the running algorithm
+// literally if the joycon detects you running, it starts the runcheck
+
+function nowRunning()
+{
+
+	if (get_val(SWI_ACCY) < -20.0)
+	{
+		runCheck = 100;	
+				
+	}
+	if (get_val(SWI_ACCY) < -0.0 && get_val(SWI_ACCY) > -6.0)
+	{
+		runCheck = runCheck--;
+	}
+}
