@@ -8,6 +8,7 @@ Here's the list of scripts that we've made so far! If you want details on how th
 - Elden Ring Fit Adventure Mod
 - FFXIV x Ring Fit Mod
 - Skyrim x Ring Fit (Coming soon)
+- BotW x Ring Fit
 
 ## Hardware needed
 - The Cronus Zen! Literally. That's it. You can grab one online for around $90-$130 depending on the source. Here is where I got mine on [Amazon](https://amzn.to/3z7KrhJ)
